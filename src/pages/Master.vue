@@ -1,13 +1,17 @@
 <template>
     <div>
         <!-- button toggles -->
-        <div class="row mt-5">
-            <div class="col-5" />
-            <div class="col-2">
-                <button class="btn btn-primary btn-block" @click.prevent="reset">CLEAR</button>
-            </div>
-            <div class="col-5"/>
-        </div>  
+                <button class="btn" @click="setDark">DARK</button>
+                <button class="btn" @click="setMid">MID</button>
+                <button class="btn" @click="setLight">LIGHT</button>
+
+
+                <button class="btn" @click="undo">UNDO</button>
+                <button class="btn" @click="redo">REDO</button>
+                <button class="btn" @click="save">SAVE</button>
+                <button class="btn" @click.prevent="reset">CLEAR</button>
+
+
 
         <!-- canvas single -->
         <div class="row mt-5">
@@ -31,8 +35,36 @@
         methods: {
             reset() {
                 this.$refs.childCanvas.reset();
+            },
+            
+            setDark() {
+                this.$refs.childCanvas.changeColor("black");
+            },
+            
+            setMid() {
+                this.$refs.childCanvas.changeColor("grey");
+            },
+            
+            setLight() {
+                this.$refs.childCanvas.changeColor("white");
+            },
+            
+            undo() {
+                this.$refs.childCanvas.undoShape();
+            },
+            
+            redo() {
+                this.$refs.childCanvas.redoShape();
+            },
+            
+            save() {
+                // ask if svg or png
             }
+            
         },
+
+
+
         components: {
             Canvas
         }
