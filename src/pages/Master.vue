@@ -1,9 +1,9 @@
 <template>
     <div>
         <!-- button toggles -->
-                <button class="btn" @click="setDark">DARK</button>
-                <button class="btn" @click="setMid">MID</button>
-                <button class="btn" @click="setLight">LIGHT</button>
+                <button class="btn" @click="changeColor('black')">DARK</button>
+                <button class="btn" @click="changeColor('grey')">MID</button>
+                <button class="btn" @click="changeColor('white')">LIGHT</button>
 
 
                 <button class="btn" @click="undo">UNDO</button>
@@ -17,7 +17,7 @@
         <div class="row mt-5">
             <div class="col-2"/>
             <div class="col-8">
-                <Canvas :canvas-id="'canvas-one'" ref="childCanvas"/>
+                <Canvas :canvas-id="'canvas-one'" ref="childCanvas" :color="color"/>
             </div>
             <div class="col-2"/>
         </div>      
@@ -30,23 +30,35 @@
         name: "Master",
         data: () => ({
             buttons: ['Simple', 'Separate', 'Replicated'],
-            single: true
+            single: true,
+            color: "black"
         }),
+
+
+
+
+        mounted(){
+            var self = this;
+            window.addEventListener("keypress", function(e){
+                if(e.key === "1"){
+                    self.changeColor("white");
+                }else if(e.key === "2"){
+                    self.changeColor('grey');
+                }else if(e.key === "3"){
+                    self.changeColor('black');
+                }
+        })
+    },
+
         methods: {
             reset() {
                 this.$refs.childCanvas.reset();
             },
             
-            setDark() {
-                this.$refs.childCanvas.changeColor("black");
-            },
-            
-            setMid() {
-                this.$refs.childCanvas.changeColor("grey");
-            },
-            
-            setLight() {
-                this.$refs.childCanvas.changeColor("white");
+            changeColor(newColor) {
+                console.log("yup");
+                this.color = newColor;
+                console.log(this.color);
             },
             
             undo() {

@@ -1,7 +1,9 @@
 
 <template>
     <div>
-        <canvas :id="canvasId" class="canvas-style" v-on:mousedown="mouseDown" 
+        <canvas :id="canvasId" class="canvas-style" 
+        v-on:mousedown="mouseDown" 
+        v-on:keydown="keyDown"
         />
     </div>
 </template>
@@ -12,16 +14,13 @@
     const paper = require('paper');
     export default {
         name: "Canvas",
-        props: ['canvasId'],
+        props: ['canvasId', 'color'],
         data: () => ({
             path: null,
             scope: null,
-            color: "black"
         }),
 
         methods: {
-
-
             reset() {
                 this.scope.project.activeLayer.removeChildren();
             },
@@ -36,24 +35,20 @@
                 })
             },
 
-            changeColor(newColor) {
-                this.color = newColor;
-            },
-
-
             createTool(scope) {
                 scope.activate();
                 return new paper.Tool();
             },
 
-
             undoShape() {
-                return;
             },
 
+            redoShape() {
+
+            },
 
             mouseDown() {
-                console.log("yes")
+
                 // in order to access functions in nested tool
                 let self = this; // QUESTION what does 'this' mean?
                 // create drawing tool
@@ -75,28 +70,6 @@
                 }
             },
 
-            keyDown() {
-                console.log("hi");
-                let self = this; // just copying the above method
-
-                this.tool = this.createTool(this.scope);
-
-
-                // maybe change this to switch case 
-                this.tool.onKeyDown = (event) => {
-                    if (event.key =='3'){
-                        self.changeColor("black");
-                    } else if (event.key =='2'){
-                        self.changeColor("grey");
-                    } else if (event.key =='1'){
-                        self.changeColor("white");
-                    } else if ((event.modifiers.command && event.key == "z")){
-                        self.undoShape();
-                    }
-                };
-            },
-
-
         },
 
         mounted() {
@@ -109,7 +82,7 @@
 
 <style scoped>
     .canvas-style {
-        width: 100% !important;
+        width: 750px !important;
         height: 500px !important;
         display: block;
         margin: auto;
