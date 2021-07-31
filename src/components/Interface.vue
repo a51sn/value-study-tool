@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1> <b> Three Value Study </b> </h1>
         <!-- button toggles -->
                 <button class="btn" @click="changeColor('black')">DARK</button>
                 <button class="btn" @click="changeColor('grey')">MID</button>
@@ -17,7 +18,7 @@
         <div class="row mt-5">
             <div class="col-2"/>
             <div class="col-8">
-                <Canvas :canvas-id="'canvas-one'" ref="childCanvas" :color="color"/>
+                <Canvas :canvas-id="'canvas-one'" ref="childCanvas" :selectedColor="color"/>
             </div>
             <div class="col-2"/>
         </div>      
@@ -27,13 +28,13 @@
 <script>
     import Canvas from "../components/Canvas";
     export default {
-        name: "Master",
+        name: "Interface",
         data: () => ({
             buttons: ['Simple', 'Separate', 'Replicated'],
             single: true,
+            numValues: 3,
             color: "black"
         }),
-
 
 
 
@@ -58,7 +59,7 @@
             changeColor(newColor) {
                 console.log("yup");
                 this.color = newColor;
-                console.log(this.color);
+                console.log(this.selectedColor);
             },
             
             undo() {
@@ -84,4 +85,6 @@
 </script>
 
 <style scoped>
+
+
 </style>

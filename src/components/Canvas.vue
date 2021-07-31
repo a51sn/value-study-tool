@@ -14,12 +14,15 @@
     const paper = require('paper');
     export default {
         name: "Canvas",
-        props: ['canvasId', 'color', 'tool'], // create scope and tool in master maybe? then pass the project and layers down here
+        props: ['canvasId', 'selectedColor', 'toolType'], // create scope and tool in master maybe? then pass the project and layers down here
         data: () => ({
             path: null,
             scope: null,
+            drawingLayer: null,
             currentTool: null,
-            freeDraw: null,
+            toolMode: null,
+
+            undoHistory: null,
         }),
 
         methods: {
@@ -27,10 +30,14 @@
                 this.scope.project.activeLayer.removeChildren();
             },
 
+            save() {
+                this.drawingLayer.exportSVG([]);
+            },
+
             pathCreate(scope) {
                 scope.activate();
                 return new paper.Path({
-                    strokeColor: this.color,
+                    strokeColor: this.selectedColor,
                     strokeJoin: 'round',
                     strokeWidth: 5,
                     closed: true,
@@ -43,10 +50,13 @@
             },
 
             undoShape() {
+                this.drawingLayer.lastChild.copyTo(this.undoHistory);
+                this.drawingLayer.lastChild.remove();
             },
 
             redoShape() {
-
+                this.undoHistory.lastChild.copyTo(this.drawingLayer);
+                this.undoHistory.lastChild.remove();
             },
 
             mouseDown() {
@@ -54,7 +64,9 @@
                 // in order to access functions in nested tool
                 let self = this; // QUESTION what does 'this' mean?
                 // create drawing tool
-                
+                this.scope.activate();
+                this.drawingLayer.activate();
+
                 this.currentTool.onMouseDown = (event) => {
                     // init path
                     self.path = self.pathCreate(self.scope);
@@ -68,7 +80,7 @@
                 this.currentTool.onMouseUp = (event) => {
                     // line completed
                     self.path.add(event.point);
-                    self.path.fillColor = this.color;
+                    self.path.fillColor = this.selectedColor;
                 }
             },
 
@@ -77,7 +89,18 @@
         mounted() {
             this.scope = new paper.PaperScope();
             this.scope.setup(this.canvasId);
+
             this.currentTool = this.createTool(this.scope);
+
+            this.undoHistory = new paper.Layer({
+                visible: false,
+                locked: true
+            })
+
+            this.drawingLayer = new paper.Layer();
+
+            console.log(this.scope.project.layers);
+
 
         }
     }

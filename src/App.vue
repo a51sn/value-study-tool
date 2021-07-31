@@ -1,17 +1,17 @@
 <template>
   <div id="app">
     <div class="container-fluid">
-      <Master/>
+      <Interface/>
     </div>
   </div>
 </template>
 
 <script>
-import Master from './pages/Master';
+import Interface from './components/Interface';
 export default {
   name: 'App',
   components: {
-    Master
+    Interface
   }
 }
 </script>
