@@ -14,10 +14,12 @@
     const paper = require('paper');
     export default {
         name: "Canvas",
-        props: ['canvasId', 'color'],
+        props: ['canvasId', 'color', 'tool'], // create scope and tool in master maybe? then pass the project and layers down here
         data: () => ({
             path: null,
             scope: null,
+            currentTool: null,
+            freeDraw: null,
         }),
 
         methods: {
@@ -52,18 +54,18 @@
                 // in order to access functions in nested tool
                 let self = this; // QUESTION what does 'this' mean?
                 // create drawing tool
-                this.tool = this.createTool(this.scope);
-                this.tool.onMouseDown = (event) => {
+                
+                this.currentTool.onMouseDown = (event) => {
                     // init path
                     self.path = self.pathCreate(self.scope);
                     // add point to path
                     
                     self.path.add(event.point);
                 };
-                this.tool.onMouseDrag = (event) => {
+                this.currentTool.onMouseDrag = (event) => {
                     self.path.add(event);
                 };
-                this.tool.onMouseUp = (event) => {
+                this.currentTool.onMouseUp = (event) => {
                     // line completed
                     self.path.add(event.point);
                     self.path.fillColor = this.color;
@@ -75,7 +77,8 @@
         mounted() {
             this.scope = new paper.PaperScope();
             this.scope.setup(this.canvasId);
-            this.canvasId
+            this.currentTool = this.createTool(this.scope);
+
         }
     }
 </script>
