@@ -2,9 +2,21 @@
     <div>
         <h1> <b> Three Value Study </b> </h1>
         <!-- button toggles -->
-                <button class="btn" @click="changeColor('black')">DARK</button>
-                <button class="btn" @click="changeColor('grey')">MID</button>
-                <button class="btn" @click="changeColor('white')">LIGHT</button>
+
+                <ValueButton value ="black" :selected="false" />
+                <ValueButton value ="grey" :selected="false" />
+                <ValueButton value ="white" :selected="false" />
+
+
+
+                <button class="btn" @click="changeColor('#000000')">DARK</button>
+                <button class="btn" @click="changeColor('#444444')">DARKMID</button>
+                <button class="btn" @click="changeColor('#888888')">TRUEMID</button>
+                <button class="btn" @click="changeColor('#cccccc')">LIGHTMID</button>
+                <button class="btn" @click="changeColor('#ffffff')">LIGHT</button>
+
+                <!-- try a v-for thing here with numValues perhaps?-->
+                <!-- look up how to make icon buttons-->
 
 
                 <button class="btn" @click="undo">UNDO</button>
@@ -26,13 +38,16 @@
 </template>
 
 <script>
-    import Canvas from "../components/Canvas";
+    import Canvas from "./Canvas.vue";
+    import ValueButton from "./buttons/ValueButton.vue";
+
     export default {
         name: "Interface",
         data: () => ({
             buttons: ['Simple', 'Separate', 'Replicated'],
             single: true,
             numValues: 3,
+            listValues: [],
             color: "black"
         }),
 
@@ -42,13 +57,18 @@
             var self = this;
             window.addEventListener("keypress", function(e){
                 if(e.key === "1"){
-                    self.changeColor("white");
+                    self.changeColor('#ffffff');
                 }else if(e.key === "2"){
-                    self.changeColor('grey');
+                    self.changeColor('#888888');
                 }else if(e.key === "3"){
-                    self.changeColor('black');
+                    self.changeColor('#000000');
                 }
-        })
+            })
+
+            for (let i =0; i < self.numValues; i++){
+                self.listValues.push("black");
+            }
+            console.log(self.listValues);
     },
 
         methods: {
@@ -57,9 +77,7 @@
             },
             
             changeColor(newColor) {
-                console.log("yup");
                 this.color = newColor;
-                console.log(this.selectedColor);
             },
             
             undo() {
@@ -71,15 +89,17 @@
             },
             
             save() {
-                // ask if svg or png
+                // pop up component option to name picture 
+                // save as svg or png?
+                this.$refs.childCanvas.save();
+
             }
             
         },
 
-
-
         components: {
-            Canvas
+            Canvas,
+            ValueButton
         }
     }
 </script>

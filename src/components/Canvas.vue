@@ -12,6 +12,10 @@
     // TODO: move all of this logic to master
     // packages
     const paper = require('paper');
+    const FileSaver = require('file-saver');
+
+
+
     export default {
         name: "Canvas",
         props: ['canvasId', 'selectedColor', 'toolType'], // create scope and tool in master maybe? then pass the project and layers down here
@@ -21,6 +25,7 @@
             drawingLayer: null,
             currentTool: null,
             toolMode: null,
+            background: null,
 
             undoHistory: null,
         }),
@@ -31,7 +36,10 @@
             },
 
             save() {
-                this.drawingLayer.exportSVG([]);
+                var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="750" height="500">' + this.drawingLayer.exportSVG({ asString: true}) + "</svg>";
+
+                var blob = new Blob([svg]);
+                FileSaver.saveAs(blob, "drawing.svg", {data: 'data:image/svg+xml;base64,' + btoa(svg),});
             },
 
             pathCreate(scope) {
@@ -99,6 +107,10 @@
 
             this.drawingLayer = new paper.Layer();
 
+            var rectangle = new paper.Rectangle(new paper.Point(0,0), new paper.Point(750,500)) ;
+            this.background = new paper.Path.Rectangle(rectangle);
+            this.background.fillColor = "grey";
+
             console.log(this.scope.project.layers);
 
 
@@ -112,6 +124,5 @@
         height: 500px !important;
         display: block;
         margin: auto;
-        background-color: grey;
     }
 </style>
