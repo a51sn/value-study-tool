@@ -1,6 +1,5 @@
 <template>
-    <button v-bind:style="{backgroundColor: value}">
-        {{ value }}
+    <button v-bind:style="{backgroundColor: value}" @click="select">
     </button>
 </template>
 
@@ -13,17 +12,24 @@
             value: String, 
             selected: Boolean
         },
+        emits: ['selectValue'],
         data: () => ({
-            
-        })
+
+        }),
+        methods: {
+            select(){
+                this.$emit('selectValue', this.value);
+            }
+        }
     }
 </script>
 
 <style scoped>
 
 button {
-    padding: 10px;
-    border-radius: 15px;
+    padding: 20px;
+    margin: 2px;
+    border-radius: 30px;
 }
 
 

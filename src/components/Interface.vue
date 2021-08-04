@@ -1,19 +1,14 @@
 <template>
     <div>
-        <h1> <b> Three Value Study </b> </h1>
+        <h1> 
+            <div style="display:inline" @click="decreaseValues"> (–) </div> 
+            <b>  {{ numToWord(numValues) }} 
+            <div style="display:inline" @click="increaseValues"> (+) </div> 
+            Value Study </b>  
+                
+        </h1>
         <!-- button toggles -->
-
-                <ValueButton value ="black" :selected="false" />
-                <ValueButton value ="grey" :selected="false" />
-                <ValueButton value ="white" :selected="false" />
-
-
-
-                <button class="btn" @click="changeColor('#000000')">DARK</button>
-                <button class="btn" @click="changeColor('#444444')">DARKMID</button>
-                <button class="btn" @click="changeColor('#888888')">TRUEMID</button>
-                <button class="btn" @click="changeColor('#cccccc')">LIGHTMID</button>
-                <button class="btn" @click="changeColor('#ffffff')">LIGHT</button>
+               <ValueButton v-for = "value in listValues" :key="value.id" :value ="value" :selected="false" @selectValue="changeColor(value)" />
 
                 <!-- try a v-for thing here with numValues perhaps?-->
                 <!-- look up how to make icon buttons-->
@@ -26,11 +21,12 @@
 
 
 
+
         <!-- canvas single -->
         <div class="row mt-5">
             <div class="col-2"/>
             <div class="col-8">
-                <Canvas :canvas-id="'canvas-one'" ref="childCanvas" :selectedColor="color"/>
+                <Canvas :canvas-id="'canvas-one'" ref="childCanvas" :selectedColor="color" :backgroundColor="backgroundColor"/>
             </div>
             <div class="col-2"/>
         </div>      
@@ -44,11 +40,10 @@
     export default {
         name: "Interface",
         data: () => ({
-            buttons: ['Simple', 'Separate', 'Replicated'],
-            single: true,
-            numValues: 3,
+            numValues: 5,
             listValues: [],
-            color: "black"
+            color: null,
+            backgroundColor: null
         }),
 
 
@@ -63,12 +58,14 @@
                 }else if(e.key === "3"){
                     self.changeColor('#000000');
                 }
+
             })
 
-            for (let i =0; i < self.numValues; i++){
-                self.listValues.push("black");
-            }
-            console.log(self.listValues);
+            this.listValues = this.generateValues(self.numValues);
+            this.color = this.listValues[0];
+
+            console.log(this.color)
+
     },
 
         methods: {
@@ -76,7 +73,49 @@
                 this.$refs.childCanvas.reset();
             },
             
+            generateValues(numValues){
+                var listValues = [];
+                for (let i =0; i < numValues; i++){
+                    let num = Math.round(255 / (numValues-1) * i);
+                    let rgbString = `rgb(${num}, ${num}, ${num})`
+                    listValues.push(rgbString);
+                }
+                console.log(listValues);
+
+                this.backgroundColor = listValues[Math.round((numValues-1)/2)];
+                console.log("interface background " + this.backgroundColor);
+
+
+                return listValues
+            },
+
+            increaseValues(){
+                this.reset();
+                if (this.numValues < 9) {
+                    this.numValues++;
+                }
+                this.listValues = this.generateValues(this.numValues);
+
+
+            },
+
+            decreaseValues(){
+                this.reset();
+                if (this.numValues > 2) {
+                    this.numValues--;
+                }
+                this.listValues = this.generateValues(this.numValues);
+
+
+            },
+
+            numToWord(num){
+                let words = ["Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"]; 
+                return words[num-2];
+            },
+
             changeColor(newColor) {
+                console.log("changing to " + newColor);
                 this.color = newColor;
             },
             

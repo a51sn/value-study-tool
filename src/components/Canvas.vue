@@ -18,7 +18,7 @@
 
     export default {
         name: "Canvas",
-        props: ['canvasId', 'selectedColor', 'toolType'], // create scope and tool in master maybe? then pass the project and layers down here
+        props: ['canvasId', 'selectedColor', 'toolType', 'backgroundColor'], // create scope and tool in master maybe? then pass the project and layers down here
         data: () => ({
             path: null,
             scope: null,
@@ -33,6 +33,8 @@
         methods: {
             reset() {
                 this.scope.project.activeLayer.removeChildren();
+                this.background.fillColor = this.backgroundColor;
+                console.log("background after reset: " + this.backgroundColor)
             },
 
             save() {
@@ -93,6 +95,12 @@
             },
 
         },
+        watch: {
+            backgroundColor: function (){
+                this.background.fillColor = this.backgroundColor;
+                console.log("background after watch: " + this.backgroundColor)
+            }
+        },
 
         mounted() {
             this.scope = new paper.PaperScope();
@@ -109,7 +117,8 @@
 
             var rectangle = new paper.Rectangle(new paper.Point(0,0), new paper.Point(750,500)) ;
             this.background = new paper.Path.Rectangle(rectangle);
-            this.background.fillColor = "grey";
+            this.background.fillColor = this.backgroundColor;
+            console.log("background: " + this.backgroundColor)
 
             console.log(this.scope.project.layers);
 
