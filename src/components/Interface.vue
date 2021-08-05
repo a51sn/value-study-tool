@@ -1,10 +1,11 @@
 <template>
+    <SaveModal v-if = "showSaveModal" />
     <div>
         <h1> 
-            <div style="display:inline" @click="decreaseValues"> (–) </div> 
-            <b>  {{ numToWord(numValues) }} 
-            <div style="display:inline" @click="increaseValues"> (+) </div> 
-            Value Study </b>  
+            <div style="display:inline; cursor:pointer; font-size: large" @click="decreaseValues">▼ </div>
+            <b> {{ numToWord(numValues) }} </b>
+            <div style="display:inline; cursor:pointer; font-size: large" @click="increaseValues"> ▲ </div> 
+            <b> Value Study </b>  
                 
         </h1>
         <!-- button toggles -->
@@ -21,7 +22,7 @@
 
 
 
-
+       
         <!-- canvas single -->
         <div class="row mt-5">
             <div class="col-2"/>
@@ -36,14 +37,22 @@
 <script>
     import Canvas from "./Canvas.vue";
     import ValueButton from "./buttons/ValueButton.vue";
+    import SaveModal from "./SaveModal.vue";
 
     export default {
         name: "Interface",
+        components: {
+            Canvas,
+            ValueButton,
+            SaveModal
+        },
+
         data: () => ({
             numValues: 5,
             listValues: [],
             color: null,
-            backgroundColor: null
+            backgroundColor: null,
+            showSaveModal: false
         }),
 
 
@@ -84,23 +93,19 @@
             },
 
             increaseValues(){
-                this.reset();
                 if (this.numValues < 9) {
+                    this.reset();
                     this.numValues++;
                 }
                 this.listValues = this.generateValues(this.numValues);
-
-
             },
 
             decreaseValues(){
-                this.reset();
                 if (this.numValues > 2) {
+                    this.reset();
                     this.numValues--;
                 }
                 this.listValues = this.generateValues(this.numValues);
-
-
             },
 
             numToWord(num){
@@ -124,16 +129,13 @@
             save() {
                 // pop up component option to name picture 
                 // save as svg or png?
+                this.showSaveModal = true;
                 this.$refs.childCanvas.save();
 
             }
             
         },
 
-        components: {
-            Canvas,
-            ValueButton
-        }
     }
 </script>
 
