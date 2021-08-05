@@ -1,6 +1,6 @@
 <template>
-    <SaveModal v-if = "showSaveModal" />
-    <SettingsModal v-if = "showSettingsModal" />
+    <SaveModal v-if = "showSaveModal" @clickDownload="save" @close="toggleSaveModal"/>
+    <SettingsModal v-if = "showSettingsModal" :numValues="numValues" @close="toggleSettingsModal" @increaseValues="increaseValues" @decreaseValues="decreaseValues"/>
 
 
     <div>
@@ -18,7 +18,7 @@
                 
                 <div style="display:inline">VALUE:</div>
 
-               <ValueButton v-for = "value in listValues" :key="value.id" :value ="value" :selected="false" @selectValue="changeColor(value)" />
+               <ValueButton v-for = "value in listValues" :key="value.id" :value ="value" :isSelected="checkSelected(value)" @selectValue="changeColor(value)" />
                 &nbsp;
                 
                 <!-- try a v-for thing here with numValues perhaps?-->
@@ -27,9 +27,9 @@
 
                 <button class="btn" @click="undo">UNDO</button>
                 <button class="btn" @click="redo">REDO</button>
-                <button class="btn" @click="save">SAVE</button>
+                <button class="btn" @click="toggleSaveModal">SAVE</button>
                 <button class="btn" @click.prevent="reset">CLEAR</button>
-                <button class="btn" @click.prevent="settings">SETTINGS</button>
+                <button class="btn" @click.prevent="toggleSettingsModal">SETTINGS</button>
 
 
 
@@ -126,7 +126,7 @@
             },
 
             numToWord(num){
-                let words = ["two", "three", "tour", "five", "six", "seven", "eight", "nine"]; 
+                let words = ["two", "three", "four", "five", "six", "seven", "eight", "nine"]; 
                 return words[num-2];
             },
 
@@ -135,6 +135,18 @@
                 this.color = newColor;
             },
             
+            checkSelected(value){
+                return value == this.color;
+            },
+
+            toggleSaveModal(){
+                this.showSaveModal = !this.showSaveModal;
+            },
+
+            toggleSettingsModal(){
+                this.showSettingsModal = !this.showSettingsModal;
+            },
+
             undo() {
                 this.$refs.childCanvas.undoShape();
             },
@@ -166,6 +178,19 @@
 
 .btn:hover{
     background-color: thistle;
+}
+
+.btn:active{
+    /* padding-left:7px;
+    padding-right:7px;
+
+    margin-left:7px;
+    margin-right:7px;
+    */
+    background-color: black;
+    color: white;
+    outline: none;
+
 }
 
 </style>

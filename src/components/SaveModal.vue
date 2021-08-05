@@ -17,8 +17,8 @@
             <br>
 
 
-            <button > download </button> 
-            <button> close </button>
+            <button @click="download"> download </button> 
+            <button @click="close"> close </button>
         </div>
     </div>
 </template>
@@ -26,9 +26,17 @@
 <script>
     export default {
         name: "SaveModal",
+        emits: ['clickDownload', 'close'],
         methods: {
-            
-        }
+            download(){
+                this.$emit("clickDownload");
+            },
+
+            close(){
+                this.$emit("close");
+            }
+        },
+
 
     }
 </script>

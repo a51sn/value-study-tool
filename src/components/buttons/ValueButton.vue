@@ -1,5 +1,5 @@
 <template>
-    <button v-bind:style="{backgroundColor: value}" @click="select">
+    <button v-bind:style="{backgroundColor: value}" :class="{selected : isSelected}" @click="select">
     </button>
 </template>
 
@@ -8,7 +8,7 @@
         name: "ValueButton",
         props: {
             value: String, 
-            selected: Boolean
+            isSelected: Boolean
         },
         emits: ['selectValue'],
         data: () => ({
@@ -31,11 +31,25 @@ button {
     transition-duration:0s;
 }
 
-button:hover{
+button:not(.selected):hover{
     padding:13px;
     margin: 4px;
 }
 
+button.selected:hover{
+    padding:12px;
+    margin: 3px;
+}
+
+button:active{
+    color: thistle;
+}
+
+.selected {
+    padding: 13px;
+    border: 4px solid thistle;
+    border-radius: 5px;
+}
 /* double border if active */
 
 
