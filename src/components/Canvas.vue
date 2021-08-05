@@ -19,6 +19,7 @@
     export default {
         name: "Canvas",
         props: ['canvasId', 'selectedColor', 'toolType', 'backgroundColor'], // create scope and tool in master maybe? then pass the project and layers down here
+        emits: ['nothingToUndo', 'nothingToRedo'],
         data: () => ({
             path: null,
             scope: null,
@@ -39,11 +40,37 @@
                 console.log("background after reset: " + this.backgroundColor)
             },
 
-            save() {
+            save(fileName, formatNum) {
+                var formats = ["svg", "png", "jpg"]
                 var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="750" height="500">' + this.drawingLayer.exportSVG({ asString: true}) + "</svg>";
 
-                var blob = new Blob([svg]);
-                FileSaver.saveAs(blob, "drawing.svg", {data: 'data:image/svg+xml;base64,' + btoa(svg),});
+                if (formatNum == 0) {
+                    var blob = new Blob([svg]);
+                    FileSaver.saveAs(blob, fileName + ".svg", {data: 'data:image/svg+xml;base64,' + btoa(svg),});
+                } else if (formatNum == 1 || formatNum == 2){
+                    // creating image element
+                    var image = new Image();
+                    image.src = 'data:image/svg+xml;base64,' + btoa(svg); //Buffer.from(str, 'base64');
+                    image.width = 750;
+                    image.height = 500;
+
+                    // creating canvas element
+                    var canvas = document.createElement('canvas');
+                    var context = canvas.getContext('2d');
+
+                    image.onload = function () {
+                        canvas.width = image.width,canvas.height = image.height,
+        
+                        context.drawImage(image, 0, 0);
+                        var a = document.createElement('a');
+                        a.download = fileName + "." + formats[formatNum];  // file name
+                        a.href = canvas.toDataURL( fileName + "/" + formats[formatNum]); //saving in PNG or JPG
+                        a.style = 'display: none;';
+                        console.log("hi");
+                        a.click();
+                    }
+                }
+               
             },
 
             pathCreate(scope) {

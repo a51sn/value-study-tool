@@ -72,7 +72,7 @@
 
             showSaveModal: false,
             showSettingsModal: false,
-            toolMode: "FREE"
+            toolMode: "FREEHAND"
 
         }),
 
@@ -171,11 +171,11 @@
                 this.$refs.childCanvas.redoShape();
             },
             
-            save() {
+            save({fileName, fileFormat}) {
                 // pop up component option to name picture 
                 // save as svg or png?
                 this.showSaveModal = true;
-                this.$refs.childCanvas.save();
+                this.$refs.childCanvas.save(fileName, fileFormat);
 
             }
             
