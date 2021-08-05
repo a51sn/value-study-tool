@@ -97,6 +97,8 @@
         },
         watch: {
             backgroundColor: function (){
+                var rectangle = new paper.Rectangle(new paper.Point(0,0), new paper.Point(750,500)) ;
+                this.background = new paper.Path.Rectangle(rectangle);
                 this.background.fillColor = this.backgroundColor;
                 console.log("background after watch: " + this.backgroundColor)
             }

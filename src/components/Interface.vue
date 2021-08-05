@@ -82,9 +82,8 @@
                 }
                 console.log(listValues);
 
-                this.backgroundColor = listValues[Math.round((numValues-1)/2)];
-                console.log("interface background " + this.backgroundColor);
-
+                this.backgroundColor = listValues[Math.floor((numValues)/2)];
+                console.log("generated values, new background color:" + this.backgroundColor);
 
                 return listValues
             },
