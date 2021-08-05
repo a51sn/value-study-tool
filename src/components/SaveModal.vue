@@ -25,8 +25,11 @@
 
 <script>
     export default {
+        name: "SaveModal",
+        methods: {
+            
+        }
 
-        
     }
 </script>
 

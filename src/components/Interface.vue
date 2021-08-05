@@ -1,16 +1,26 @@
 <template>
     <SaveModal v-if = "showSaveModal" />
+    <SettingsModal v-if = "showSettingsModal" />
+
+
     <div>
         <h1> 
-            <div style="display:inline; cursor:pointer; font-size: large" @click="decreaseValues">▼ </div>
+            <!-- <div style="display:inline; cursor:pointer; font-size: large" @click="decreaseValues">▼ </div> -->
             <b> {{ numToWord(numValues) }} </b>
-            <div style="display:inline; cursor:pointer; font-size: large" @click="increaseValues"> ▲ </div> 
-            <b> Value Study </b>  
+            <!--<div style="display:inline; cursor:pointer; font-size: large" @click="increaseValues"> ▲ </div> -->
+            <b> value study </b>  
                 
         </h1>
         <!-- button toggles -->
-               <ValueButton v-for = "value in listValues" :key="value.id" :value ="value" :selected="false" @selectValue="changeColor(value)" />
+                <div style="display:inline">TOOL:</div>
 
+                <button class="btn" @click.prevent="toggleTool">{{toolMode}}</button> &nbsp;
+                
+                <div style="display:inline">VALUE:</div>
+
+               <ValueButton v-for = "value in listValues" :key="value.id" :value ="value" :selected="false" @selectValue="changeColor(value)" />
+                &nbsp;
+                
                 <!-- try a v-for thing here with numValues perhaps?-->
                 <!-- look up how to make icon buttons-->
 
@@ -19,12 +29,14 @@
                 <button class="btn" @click="redo">REDO</button>
                 <button class="btn" @click="save">SAVE</button>
                 <button class="btn" @click.prevent="reset">CLEAR</button>
+                <button class="btn" @click.prevent="settings">SETTINGS</button>
+
 
 
 
        
         <!-- canvas single -->
-        <div class="row mt-5">
+        <div class="row mt-4">
             <div class="col-2"/>
             <div class="col-8">
                 <Canvas :canvas-id="'canvas-one'" ref="childCanvas" :selectedColor="color" :backgroundColor="backgroundColor"/>
@@ -38,21 +50,26 @@
     import Canvas from "./Canvas.vue";
     import ValueButton from "./buttons/ValueButton.vue";
     import SaveModal from "./SaveModal.vue";
+    import SettingsModal from "./SettingsModal.vue";
 
     export default {
         name: "Interface",
         components: {
             Canvas,
             ValueButton,
-            SaveModal
+            SaveModal,
+            SettingsModal
         },
 
         data: () => ({
-            numValues: 5,
+            numValues: 3,
             listValues: [],
             color: null,
             backgroundColor: null,
-            showSaveModal: false
+            showSaveModal: false,
+            showSettingsModal: false,
+            toolMode: "FREE"
+
         }),
 
 
@@ -109,7 +126,7 @@
             },
 
             numToWord(num){
-                let words = ["Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"]; 
+                let words = ["two", "three", "tour", "five", "six", "seven", "eight", "nine"]; 
                 return words[num-2];
             },
 
@@ -140,6 +157,15 @@
 </script>
 
 <style scoped>
+.btn{
+    border-width: 1px;
+    border-color: black;
+    margin: 2px;
+    transition-duration: 0.1s;
+}
 
+.btn:hover{
+    background-color: thistle;
+}
 
 </style>

@@ -25,12 +25,16 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  /* color: #2c3e50; */
+  /* color: rgb(48, 74, 100); */
+
+  margin-top: 40px;
 }
 
 h1{
   font-family: 'Rubik';
+  font-size: 50px;
+  margin: 3px;
 }
 
 </style>

@@ -4,8 +4,6 @@
 </template>
 
 <script>
-    // TODO: move all of this logic to master
-    // packages
     export default {
         name: "ValueButton",
         props: {
@@ -27,10 +25,18 @@
 <style scoped>
 
 button {
-    padding: 20px;
+    padding: 15px;
     margin: 2px;
-    border-radius: 30px;
+    border-radius: 5px;
+    transition-duration:0s;
 }
+
+button:hover{
+    padding:13px;
+    margin: 4px;
+}
+
+/* double border if active */
 
 
 </style>
