@@ -44,6 +44,8 @@
             <div class="col-2"/>
         </div>      
     </div>
+    <div>.</div>
+    <p class="foot"> <a href="/tutorial.html">tutorial</a> / <a href="/help.html">help</a> / <a href="/about.html">about</a> </p>
 </template>
 
 <script>
@@ -76,10 +78,16 @@
 
         mounted(){
             var self = this;
-            window.addEventListener("keypress", function(e){
+            window.addEventListener("keydown", function(e){
                 if(e.key >= '1' && e.key <= self.numValues.toString()){
                     self.changeColor(self.listValues[e.key-1]);
-                }
+                } else if (e.key == 'z' && e.ctrlKey || e.key == 'z' && e.metaKey){
+                    if (e.shiftKey){ // doesn't work  for some reason??
+                        self.redo();
+                    } else {
+                        self.undo();
+                    }
+                } 
             })
 
             this.listValues = this.generateValues(self.numValues);
@@ -103,6 +111,10 @@
                 }
                 console.log(listValues);
 
+                // reset stroke color to darkest value
+                this.color = 'black';
+
+                // reset bg color halfway value
                 this.backgroundColor = listValues[Math.floor((numValues)/2)];
                 console.log("generated values, new background color:" + this.backgroundColor);
 
@@ -148,10 +160,12 @@
             },
 
             undo() {
+                console.log(this.$refs.childCanvas);
                 this.$refs.childCanvas.undoShape();
             },
             
             redo() {
+                console.log(this.$refs.childCanvas);
                 this.$refs.childCanvas.redoShape();
             },
             
@@ -169,28 +183,10 @@
 </script>
 
 <style scoped>
-.btn{
-    border-width: 1px;
-    border-color: black;
-    margin: 2px;
-    transition-duration: 0.1s;
-}
 
-.btn:hover{
-    background-color: thistle;
-}
 
-.btn:active{
-    /* padding-left:7px;
-    padding-right:7px;
-
-    margin-left:7px;
-    margin-right:7px;
-    */
-    background-color: black;
-    color: white;
-    outline: none;
-
+.footer {
+    font-size: small;
 }
 
 </style>

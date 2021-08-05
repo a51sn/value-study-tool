@@ -62,13 +62,22 @@
             },
 
             undoShape() {
-                this.drawingLayer.lastChild.copyTo(this.undoHistory);
-                this.drawingLayer.lastChild.remove();
+                if (this.drawingLayer.lastChild === this.background){
+                    this.$emit("nothingToUndo");
+                } else {
+                    this.drawingLayer.lastChild.copyTo(this.undoHistory);
+                    this.drawingLayer.lastChild.remove();
+                }
+                
             },
 
             redoShape() {
-                this.undoHistory.lastChild.copyTo(this.drawingLayer);
-                this.undoHistory.lastChild.remove();
+                if (this.undoHistory.isEmpty()){
+                    this.$emit("nothingToRedo");
+                } else {
+                    this.undoHistory.lastChild.copyTo(this.drawingLayer);
+                    this.undoHistory.lastChild.remove();
+                }
             },
 
             mouseDown() {
