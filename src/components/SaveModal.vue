@@ -17,8 +17,8 @@
             <br>
 
 
-            <button @click="download"> download </button> 
-            <button @click="close"> close </button>
+            <button class="btn" @click="download"> download </button> 
+            <button class="btn" @click="close"> close </button>
         </div>
     </div>
 </template>
