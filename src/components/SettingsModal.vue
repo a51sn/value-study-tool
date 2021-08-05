@@ -5,23 +5,24 @@
             
             <p> # of values:<span style="display:inline; color:red">*</span>
                 &emsp; &emsp; &emsp; &emsp; 
-                <button @click="decreaseValues"> - </button>
+                <button class="btn smallBtn" @click="decreaseValues"> - </button>
                 {{ numValues }} 
-                <button @click="increaseValues"> + </button>
+                <button class="btn smallBtn" @click="increaseValues"> + </button>
             </p>
 
-            <p> dimensions </p>
+            <p> aspect ratio: &emsp; &emsp; &emsp; &emsp; &emsp; {{aspectRatio[0]}}, {{aspectRatio[1]}} </p> 
+
+            <p> canvas bg: &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; grey </p>
 
             <p> interface bg: &emsp; &emsp; &emsp; &emsp; &emsp; white</p>
-            <p> canvas bg: &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; grey </p>
-            <p> tutorial / help </p>
+            <p> accent color: &emsp; &emsp; &emsp; &emsp; &emsp; thistle </p>
 
             <p style="color:red"> *WARNING: changing this WILL reset your canvas</p>
 
             <br>
 
 
-            <button @click="close"> close </button>
+            <button class="btn" @click="close"> close </button>
         </div>
     </div>
 </template>
@@ -29,7 +30,7 @@
 <script>
     export default {
         name: "SettingsModal",
-        props: ['numValues', 'darkMode'],
+        props: ['numValues', 'darkMode', 'aspectRatio'],
         emits: ['close', 'increaseValues', 'decreaseValues'],
         methods: {
             close(){

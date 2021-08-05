@@ -5,6 +5,7 @@
       <Interface/>
     </div>
   </div>
+  
 </template>
 
 <script>
@@ -35,6 +36,42 @@ h1{
   font-family: 'Rubik';
   font-size: 50px;
   margin: 3px;
+}
+
+a {
+  color: black;
+}
+
+a:hover{
+  color: rgb(128, 92, 128);
+}
+
+.btn{
+    border-width: 1px;
+    border-color: black;
+    margin: 2px;
+    transition-duration: 0.1s;
+}
+
+.btn:hover{
+    background-color: thistle;
+}
+
+.btn:active{
+    /* padding-left:7px;
+    padding-right:7px;
+
+    margin-left:7px;
+    margin-right:7px;
+    */
+    background-color: black;
+    color: white;
+    outline: none;
+}
+
+.smallBtn {
+  size: small;
+  text-size-adjust: auto;
 }
 
 </style>

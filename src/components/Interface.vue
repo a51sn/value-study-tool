@@ -1,6 +1,6 @@
 <template>
     <SaveModal v-if = "showSaveModal" @clickDownload="save" @close="toggleSaveModal"/>
-    <SettingsModal v-if = "showSettingsModal" :numValues="numValues" @close="toggleSettingsModal" @increaseValues="increaseValues" @decreaseValues="decreaseValues"/>
+    <SettingsModal v-if = "showSettingsModal" :aspectRatio="aspectRatio" :numValues="numValues" @close="toggleSettingsModal" @increaseValues="increaseValues" @decreaseValues="decreaseValues"/>
 
 
     <div>
@@ -68,6 +68,8 @@
             listValues: [],
             color: null,
             backgroundColor: null,
+            aspectRatio: [3,2],
+
             showSaveModal: false,
             showSettingsModal: false,
             toolMode: "FREE"
@@ -183,7 +185,6 @@
 </script>
 
 <style scoped>
-
 
 .footer {
     font-size: small;
