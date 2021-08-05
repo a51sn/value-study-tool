@@ -51,14 +51,9 @@
         mounted(){
             var self = this;
             window.addEventListener("keypress", function(e){
-                if(e.key === "1"){
-                    self.changeColor('#ffffff');
-                }else if(e.key === "2"){
-                    self.changeColor('#888888');
-                }else if(e.key === "3"){
-                    self.changeColor('#000000');
+                if(e.key >= '1' && e.key <= self.numValues.toString()){
+                    self.changeColor(self.listValues[e.key-1]);
                 }
-
             })
 
             this.listValues = this.generateValues(self.numValues);
