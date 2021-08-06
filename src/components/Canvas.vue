@@ -139,6 +139,7 @@
                 this.scope.activate();
                 this.drawingLayer.activate();
                 console.log(this.toolMode);
+                this.undoHistory.removeChildren();
 
                 // POLYGON TOOL
                 if(this.toolMode){

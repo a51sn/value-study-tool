@@ -2,7 +2,6 @@
     <SaveModal v-if = "showSaveModal" @clickDownload="save" @close="toggleSaveModal"/>
     <SettingsModal v-if = "showSettingsModal" :aspectRatio="aspectRatio" :numValues="numValues" @close="toggleSettingsModal" @increaseValues="increaseValues" @decreaseValues="decreaseValues"/>
 
-
     <div>
         <h1> 
             <!-- <div style="display:inline; cursor:pointer; font-size: large" @click="decreaseValues">▼ </div> -->
@@ -187,11 +186,13 @@
             },
 
             undo() {
+                this.finishedShape();
                 console.log(this.$refs.childCanvas);
                 this.$refs.childCanvas.undoShape();
             },
             
             redo() {
+                this.finishedShape();
                 console.log(this.$refs.childCanvas);
                 this.$refs.childCanvas.redoShape();
             },
