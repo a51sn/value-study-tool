@@ -42,12 +42,12 @@ button.selected:hover{
 }
 
 button:active{
-    color: thistle;
+    color: var(--accent-color);
 }
 
 .selected {
     padding: 13px;
-    border: 4px solid thistle;
+    border: 4px solid var(--accent-color);
     border-radius: 5px;
 }
 /* double border if active */

@@ -2,7 +2,7 @@
 <template>
     <div>
         <canvas :id="canvasId" class="canvas-style" 
-        v-on:mousedown="mouseDown" 
+        v-on:mousedown="mouseDown" v-on:mouseMove="mouseMove"
         v-on:keydown="keyDown"
         />
     </div>
@@ -18,17 +18,19 @@
 
     export default {
         name: "Canvas",
-        props: ['canvasId', 'selectedColor', 'toolType', 'backgroundColor'], // create scope and tool in master maybe? then pass the project and layers down here
-        emits: ['nothingToUndo', 'nothingToRedo'],
+        props: ['canvasId', 'selectedColor', 'backgroundColor', 'toolMode'], // create scope and tool in master maybe? then pass the project and layers down here
+        emits: ['nothingToUndo', 'nothingToRedo', 'shapeStarted', 'shapeFinished'],
         data: () => ({
             path: null,
             scope: null,
             drawingLayer: null,
             currentTool: null,
-            toolMode: null,
             background: null,
 
             undoHistory: null,
+
+            lastPathFinished: null,
+            closingPoint: null,
         }),
 
         methods: {
@@ -107,29 +109,99 @@
                 }
             },
 
-            mouseDown() {
+            finish(){
+                this.lastPathFinished = true;
+            },
 
+            mouseMove() {
                 // in order to access functions in nested tool
-                let self = this; // QUESTION what does 'this' mean?
-                // create drawing tool
+                let self = this; 
                 this.scope.activate();
                 this.drawingLayer.activate();
 
-                this.currentTool.onMouseDown = (event) => {
-                    // init path
-                    self.path = self.pathCreate(self.scope);
-                    // add point to path
-                    
-                    self.path.add(event.point);
-                };
-                this.currentTool.onMouseDrag = (event) => {
-                    self.path.add(event);
-                };
-                this.currentTool.onMouseUp = (event) => {
-                    // line completed
-                    self.path.add(event.point);
-                    self.path.fillColor = this.selectedColor;
+
+                if (this.toolMode) {
+                    this.currentTool.onMouseMove = (event) => {
+                        self.scope.project.activeLayer.selected = false;
+                        if (!self.lastPathFinished && event.point == self.closingPoint)
+                            self.closingPoint.selected = true;
+
+                        self.path.add(event.point);
+                        self.path.lastChild.remove();
+                    }
                 }
+
+            },
+
+            mouseDown() {
+                // in order to access functions in nested tool
+                let self = this; 
+                this.scope.activate();
+                this.drawingLayer.activate();
+                console.log(this.toolMode);
+
+                // POLYGON TOOL
+                if(this.toolMode){
+                    this.currentTool.onMouseDown = (event) => {
+                        console.log("hey");
+                        // init path
+                        if (self.lastPathFinished){
+                            self.path = self.pathCreate(self.scope);
+                            self.lastPathFinished = false;
+                            this.$emit("shapeStarted");
+                            self.path.add(event.point);
+                            self.path.fillColor = this.selectedColor;
+
+
+                        } else {
+                            self.path.add(event.point);
+                        }
+                    };
+
+                    this.currentTool.onMouseUp = (event) => {
+                        console.log("mouse uppp")
+
+                        var hitResult = self.drawingLayer.hitTest(event.point, 
+                            {
+                                segments: true,
+                                stroke: true,
+                                fill: true,
+                                tolerance: 5
+                            });
+                            
+                        if (!self.closingPoint){
+                            self.closingPoint = event.point;
+                            self.path.add(event.point);
+                            console.log("here at " + event.point);
+
+                        } else if (!hitResult) {
+                            self.path.add(event.point);
+
+                        }  else if (hitResult.point == self.closingPoint) {
+                            self.path.fillColor = this.selectedColor;
+                        }
+                        
+                    }
+
+                // FREEHAND TOOL
+                } else {
+                    self.lastPathFinished = true;
+                    this.currentTool.onMouseDown = (event) => {
+                        // init path
+                        self.path = self.pathCreate(self.scope);
+                        // add point to path
+                        self.path.add(event.point);
+                    };
+                    this.currentTool.onMouseDrag = (event) => {
+                        self.path.add(event);
+                    };
+                    this.currentTool.onMouseUp = (event) => {
+                        // line completed
+                        self.path.add(event.point);
+                        self.path.fillColor = this.selectedColor;
+                    }
+                }
+
             },
 
         },
@@ -162,7 +234,7 @@
 
             console.log(this.scope.project.layers);
 
-
+            this.lastPathFinished = true;
         }
     }
 </script>

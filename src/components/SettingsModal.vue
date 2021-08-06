@@ -10,14 +10,16 @@
                 <button class="btn smallBtn" @click="increaseValues"> + </button>
             </p>
 
-            <p> aspect ratio: &emsp; &emsp; &emsp; &emsp; &emsp; {{aspectRatio[0]}}, {{aspectRatio[1]}} </p> 
+            <p> aspect ratio:<span style="display:inline; color:red">*</span> 
+                &emsp;&emsp;&emsp; &emsp;&emsp;
+                {{aspectRatio[0]}} : {{aspectRatio[1]}} </p> 
 
             <p> canvas bg: &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; grey </p>
 
             <p> interface bg: &emsp; &emsp; &emsp; &emsp; &emsp; white</p>
-            <p> accent color: &emsp; &emsp; &emsp; &emsp; &emsp; thistle </p>
+            <p> accent color: &emsp; &emsp; &emsp; &emsp; &emsp; {{accentColor}} </p>
 
-            <p style="color:red"> *WARNING: changing this WILL reset your canvas</p>
+            <p style="color:red"> *WARNING: changing these will reset your canvas</p>
 
             <br>
 
@@ -30,6 +32,9 @@
 <script>
     export default {
         name: "SettingsModal",
+        data: () => ({
+            accentColor: null
+        }),
         props: ['numValues', 'darkMode', 'aspectRatio'],
         emits: ['close', 'increaseValues', 'decreaseValues'],
         methods: {
@@ -44,6 +49,9 @@
             decreaseValues(){
                 this.$emit("decreaseValues");
             }
+        },
+        mounted() {
+            this.accentColor = "thistle"
         }
 
     }

@@ -22,6 +22,8 @@ export default {
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Rubik:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 #app {
+  --accent-color: thistle;
+
   font-family: 'Roboto Mono', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -54,7 +56,7 @@ a:hover{
 }
 
 .btn:hover{
-    background-color: thistle;
+    background-color: var(--accent-color);
 }
 
 .btn:active{
@@ -68,6 +70,17 @@ a:hover{
     color: white;
     outline: none;
 }
+
+.urgent-btn {
+  background-color: black;
+  color: white;
+}
+
+.urgent-btn:hover {
+  color: black;
+  background-color: white;
+}
+
 
 .smallBtn {
   size: small;

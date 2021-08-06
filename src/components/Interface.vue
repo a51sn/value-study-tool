@@ -14,8 +14,11 @@
         <!-- button toggles -->
                 <div style="display:inline">TOOL:</div>
 
-                <button class="btn" @click.prevent="toggleTool">{{toolMode}}</button> &nbsp;
-                
+                <button class="btn" @click.prevent="toggleTool">{{tools[toolMode]}}</button> 
+                <transition name="fade">
+                <button class="btn urgent-btn" @click.prevent="finishedShape" v-if="toolMode && !shapeFinished"> FINISH SHAPE </button> 
+                </transition>
+                &nbsp;
                 <div style="display:inline">VALUE:</div>
 
                <ValueButton v-for = "value in listValues" :key="value.id" :value ="value" :isSelected="checkSelected(value)" @selectValue="changeColor(value)" />
@@ -39,13 +42,13 @@
         <div class="row mt-4">
             <div class="col-2"/>
             <div class="col-8">
-                <Canvas :canvas-id="'canvas-one'" ref="childCanvas" :selectedColor="color" :backgroundColor="backgroundColor"/>
+                <Canvas :canvas-id="'canvas-one'" ref="childCanvas" :selectedColor="color" :backgroundColor="backgroundColor" :toolMode="toolMode" @shapeFinished="finishedShape" @shapeStarted="startedShape"/>
             </div>
             <div class="col-2"/>
         </div>      
     </div>
     <div>.</div>
-    <p class="foot"> <a href="/tutorial.html">tutorial</a> / <a href="/help.html">help</a> / <a href="/about.html">about</a> </p>
+    <p> <a href="/tutorial.html">tutorial</a> / <a href="/help.html">help</a> / <a href="/about.html">about</a> </p>
 </template>
 
 <script>
@@ -72,7 +75,9 @@
 
             showSaveModal: false,
             showSettingsModal: false,
-            toolMode: "FREEHAND"
+            tools: ["FREEHAND", "POLYGON"],
+            toolMode: null,
+            shapeFinished: null,
 
         }),
 
@@ -96,6 +101,8 @@
             this.color = this.listValues[0];
 
             console.log(this.color)
+            this.toolMode = 0;
+            this.shapeFinished = true;
 
     },
 
@@ -161,6 +168,24 @@
                 this.showSettingsModal = !this.showSettingsModal;
             },
 
+            toggleTool(){
+                if (this.toolMode == 0){
+                    this.toolMode = 1;
+                } else {
+                    this.finishedShape();
+                    this.toolMode = 0;
+                }
+            },
+
+            startedShape(){
+                this.shapeFinished = false;
+            },
+
+            finishedShape(){
+                this.shapeFinished = true;
+                this.$refs.childCanvas.finish();
+            },
+
             undo() {
                 console.log(this.$refs.childCanvas);
                 this.$refs.childCanvas.undoShape();
@@ -186,8 +211,14 @@
 
 <style scoped>
 
-.footer {
-    font-size: small;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 </style>
