@@ -28,6 +28,7 @@
             background: null,
 
             undoHistory: null,
+            recoverCleared: null,
 
             lastPathFinished: null,
             closingPoint: null,
@@ -35,6 +36,7 @@
 
         methods: {
             reset() {
+                this.scope.project.activeLayer.copyTo(this.recoverCleared);
                 this.scope.project.activeLayer.removeChildren();
                 var rectangle = new paper.Rectangle(new paper.Point(0,0), new paper.Point(750,500)) ;
                 this.background = new paper.Path.Rectangle(rectangle);
@@ -92,7 +94,14 @@
 
             undoShape() {
                 if (this.drawingLayer.lastChild === this.background){
-                    this.$emit("nothingToUndo");
+                    if (this.recoverCleared.isEmpty()){
+                        this.$emit("nothingToUndo");
+                    } else {
+                        for (const child of this.recoverCleared.children){
+                            child.copyTo(this.drawingLayer);
+                        }
+                        this.recoverCleared.removeChildren();
+                    }
                 } else {
                     this.drawingLayer.lastChild.copyTo(this.undoHistory);
                     this.drawingLayer.lastChild.remove();
@@ -224,6 +233,11 @@
             this.currentTool = this.createTool(this.scope);
 
             this.undoHistory = new paper.Layer({
+                visible: false,
+                locked: true
+            });
+
+            this.recoverCleared = new paper.Layer({
                 visible: false,
                 locked: true
             })
