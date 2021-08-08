@@ -2,8 +2,7 @@
 <template>
     <div>
         <canvas :id="canvasId" class="canvas-style" 
-        v-on:mousedown="mouseDown" v-on:mouseMove="mouseMove"
-        v-on:keydown="keyDown"
+        v-on:mousedown="mouseDown"
         />
     </div>
 </template>
@@ -122,26 +121,6 @@
                 this.lastPathFinished = true;
             },
 
-            mouseMove() {
-                // in order to access functions in nested tool
-                let self = this; 
-                this.scope.activate();
-                this.drawingLayer.activate();
-
-                if (this.toolMode) {
-                    this.currentTool.onMouseMove = (event) => {
-                        self.scope.project.activeLayer.selected = false;
-                        if (!self.lastPathFinished && event.point == self.closingPoint)
-                            self.closingPoint.selected = true;
-
-                        self.path.add(event.point);
-                        self.path.lastChild.remove();
-                    }
-                }
-
-            },
-            
-
             mouseDown() {
                 // in order to access functions in nested tool
                 let self = this; 
@@ -168,34 +147,11 @@
                         }
                     };
 
-                    this.currentTool.onMouseDrag = ()=>{
-                        self.path.lastChild.remove();
+                    this.currentTool.onMouseDrag = (event)=>{
+                        self.path.lastSegment.remove();
+                        self.path.add(event.point);
                     };
 
-                    this.currentTool.onMouseUp = (event) => {
-                        console.log("mouse uppp")
-
-                        var hitResult = self.drawingLayer.hitTest(event.point, 
-                            {
-                                segments: true,
-                                stroke: true,
-                                fill: true,
-                                tolerance: 5
-                            });
-                            
-                        if (!self.closingPoint){
-                            self.closingPoint = event.point;
-                            self.path.add(event.point);
-                            console.log("here at " + event.point);
-
-                        } else if (!hitResult) {
-                            self.path.add(event.point);
-
-                        }  else if (hitResult.point == self.closingPoint) {
-                            self.path.fillColor = this.selectedColor;
-                        }
-                        
-                    }
 
                 // FREEHAND TOOL
                 } else {
