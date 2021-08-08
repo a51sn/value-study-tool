@@ -1,6 +1,6 @@
 <template>
     <SaveModal v-if = "showSaveModal" @clickDownload="save" @close="toggleSaveModal"/>
-    <SettingsModal v-if = "showSettingsModal" :aspectRatio="aspectRatio" :numValues="numValues" @close="toggleSettingsModal" @increaseValues="increaseValues" @decreaseValues="decreaseValues"/>
+    <SettingsModal v-if = "showSettingsModal" :aspectRatio="aspectRatio" :numValues="numValues" :bgColorNum="listValues.indexOf(backgroundColor) + 1" @close="toggleSettingsModal" @increaseValues="increaseValues" @decreaseValues="decreaseValues" @increaseBg="increaseBg" @decreaseBg="decreaseBg"/>
 
     <div>
         <h1> 
@@ -13,9 +13,9 @@
         <!-- button toggles -->
                 <div style="display:inline">TOOL:</div>
 
-                <button class="btn" @click.prevent="toggleTool">{{tools[toolMode]}}</button> 
-                <transition name="fade">
-                <button class="btn urgent-btn" @click.prevent="finishedShape" v-if="toolMode && !shapeFinished"> FINISH SHAPE </button> 
+                <transition name="fade" mode="out-in">
+                <button class="btn" @click.prevent="toggleTool" v-if="shapeFinished">{{tools[toolMode]}}</button> 
+                <button class="btn urgent-btn" @click.prevent="finishedShape" v-else> FINISH </button> 
                 </transition>
                 &nbsp;
                 <div style="display:inline">VALUE:</div>
@@ -23,8 +23,6 @@
                <ValueButton v-for = "value in listValues" :key="value.id" :value ="value" :isSelected="checkSelected(value)" @selectValue="changeColor(value)" />
                 &nbsp;
                 
-                <!-- try a v-for thing here with numValues perhaps?-->
-                <!-- look up how to make icon buttons-->
 
 
                 <button class="btn" @click="undo">UNDO</button>
@@ -32,10 +30,6 @@
                 <button class="btn" @click="toggleSaveModal">SAVE</button>
                 <button class="btn" @click.prevent="reset">CLEAR</button>
                 <button class="btn" @click.prevent="toggleSettingsModal">SETTINGS</button>
-
-
-
-
        
         <!-- canvas single -->
         <div class="row mt-4">
@@ -47,7 +41,7 @@
         </div>      
     </div>
     <div>.</div>
-    <p> <a href="/tutorial.html">tutorial</a> / <a href="/help.html">help</a> / <a href="/about.html">about</a> </p>
+    <p> <a href="/help.html">help</a> / <a href="/guestbook.html">guestbook</a> / <a href="/about.html">about</a> </p>
 </template>
 
 <script>
@@ -151,12 +145,27 @@
             },
 
             changeColor(newColor) {
+                this.finishedShape();
                 console.log("changing to " + newColor);
                 this.color = newColor;
             },
             
             checkSelected(value){
                 return value == this.color;
+            },
+
+            increaseBg(){
+                var bgIndex = this.listValues.indexOf(this.backgroundColor);
+                if (bgIndex < this.numValues - 1){
+                    this.backgroundColor = this.listValues[bgIndex + 1];
+                } 
+            },
+
+            decreaseBg(){
+                var bgIndex = this.listValues.indexOf(this.backgroundColor);
+                if (bgIndex > 0){
+                    this.backgroundColor = this.listValues[bgIndex - 1];
+                } 
             },
 
             toggleSaveModal(){
@@ -221,5 +230,6 @@
 .fade-leave-to {
   opacity: 0;
 }
+
 
 </style>

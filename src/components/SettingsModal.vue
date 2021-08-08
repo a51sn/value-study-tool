@@ -2,23 +2,32 @@
     <div class="backdrop">
         <div class="settingsModal">
             <h3> settings </h3> 
-            
+
+            <p> aspect ratio:<span style="display:inline; color:red">*</span> 
+                &emsp;&emsp;&emsp; &hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;
+                <strong>
+                {{aspectRatio[0]}}:{{aspectRatio[1]}}  
+                </strong>
+                &hairsp;
+                <button class="btn smallBtn" @click="decreaseValues"> edit </button>
+                </p> 
+
+
             <p> # of values:<span style="display:inline; color:red">*</span>
-                &emsp; &emsp; &emsp; &emsp; 
+                &emsp; &emsp; &emsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;
                 <button class="btn smallBtn" @click="decreaseValues"> - </button>
-                {{ numValues }} 
+                &hairsp;&hairsp;&hairsp;&hairsp;&hairsp;<strong>{{ numValues }}</strong>&hairsp;&hairsp;&hairsp;&hairsp;
                 <button class="btn smallBtn" @click="increaseValues"> + </button>
             </p>
 
-            <p> aspect ratio:<span style="display:inline; color:red">*</span> 
-                &emsp;&emsp;&emsp; &emsp;&emsp;
-                {{aspectRatio[0]}} : {{aspectRatio[1]}} </p> 
+            <p> canvas bg: &emsp; &emsp; &emsp; &emsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;
+                <button class="btn smallBtn" @click="decreaseBg"> - </button>
+                <strong> #{{bgColorNum}}</strong> <button class="btn smallBtn" @click="increaseBg"> + </button>
+                </p>
 
-            <p> canvas bg: &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; grey </p>
-
-            <p> interface bg: &emsp; &emsp; &emsp; &emsp; &emsp; white</p>
-            <p> accent color: &emsp; &emsp; &emsp; &emsp; &emsp; {{accentColor}} </p>
-
+            <p> interface bg: &emsp; &emsp; &emsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp; <strong>white</strong></p>
+            <p> accent color: &emsp; &emsp; &emsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp; <strong>{{accentColor}}</strong> </p>
+            <br>
             <p style="color:red"> *WARNING: changing these will reset your canvas</p>
 
             <br>
@@ -35,8 +44,8 @@
         data: () => ({
             accentColor: null
         }),
-        props: ['numValues', 'darkMode', 'aspectRatio'],
-        emits: ['close', 'increaseValues', 'decreaseValues'],
+        props: ['numValues', 'darkMode', 'aspectRatio', 'bgColorNum'],
+        emits: ['close', 'increaseValues', 'decreaseValues', 'increaseBg', 'decreaseBg'],
         methods: {
             close(){
                 this.$emit("close");
@@ -48,6 +57,14 @@
 
             decreaseValues(){
                 this.$emit("decreaseValues");
+            },
+            
+            increaseBg(){
+                this.$emit("increaseBg");
+            },
+            
+            decreaseBg(){
+                this.$emit("decreaseBg");
             }
         },
         mounted() {

@@ -132,6 +132,7 @@
                 }
 
             },
+            
 
             mouseDown() {
                 // in order to access functions in nested tool
@@ -157,6 +158,10 @@
                         } else {
                             self.path.add(event.point);
                         }
+                    };
+
+                    this.currentTool.onMouseDrag = ()=>{
+                        self.path.lastChild.remove();
                     };
 
                     this.currentTool.onMouseUp = (event) => {
