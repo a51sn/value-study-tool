@@ -24,9 +24,14 @@
                 <button class="btn smallBtn" @click="decreaseBg"> - </button>
                 <strong> #{{bgColorNum}}</strong> <button class="btn smallBtn" @click="increaseBg"> + </button>
                 </p>
-
-            <p> interface bg: &emsp; &emsp; &emsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp; <strong>white</strong></p>
-            <p> accent color: &emsp; &emsp; &emsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp; <strong>{{thisAccentColor}}</strong> </p>
+            <!--
+            <p> interface bg: &emsp; &emsp; &emsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp; <strong>white</strong> 
+            &nbsp;
+            <button class="btn smallBtn" @click="cycleInterfaceBg"> &gt; </button> </p>
+            
+            <p> accent color: &emsp; &emsp; &emsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp;&hairsp; <strong>{{thisAccentColor}} </strong> 
+            &hairsp;<button class="btn smallBtn" @click="cycleInterfaceBg"> &gt; </button> </p>
+            -->
             <br>
             <p style="color:red"> *WARNING: changing these will reset your canvas</p>
 

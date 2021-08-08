@@ -54,7 +54,10 @@
             :backgroundColor="backgroundColor" 
             :toolMode="toolMode" 
             @shapeFinished="finishedShape" 
-            @shapeStarted="startedShape"/>
+            @shapeStarted="startedShape"
+            @nothingToUndo="showAlert('nothing to undo')"
+            @nothingToRedo="showAlert('nothing to redo')"/>
+
 
     </div>      
     
@@ -119,6 +122,11 @@
     },
 
         methods: {
+            showAlert(message){
+                // fill in later
+                console.log(message);
+            },
+
             reset() {
                 this.$refs.childCanvas.reset();
             },
@@ -230,7 +238,6 @@
                 // save as svg or png?
                 this.showSaveModal = true;
                 this.$refs.childCanvas.save(fileName, fileFormat);
-
             }
             
         },
