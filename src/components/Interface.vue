@@ -1,47 +1,66 @@
 <template>
-    <SaveModal v-if = "showSaveModal" @clickDownload="save" @close="toggleSaveModal"/>
-    <SettingsModal v-if = "showSettingsModal" :aspectRatio="aspectRatio" :numValues="numValues" :bgColorNum="listValues.indexOf(backgroundColor) + 1" @close="toggleSettingsModal" @increaseValues="increaseValues" @decreaseValues="decreaseValues" @increaseBg="increaseBg" @decreaseBg="decreaseBg"/>
+    <SaveModal 
+        v-if = "showSaveModal" 
+        @clickDownload="save" 
+        @close="toggleSaveModal"/>
+    <SettingsModal 
+        v-if = "showSettingsModal" 
+        :aspectRatio="aspectRatio" 
+        :numValues="numValues" 
+        :bgColorNum="listValues.indexOf(backgroundColor) + 1" 
+        @close="toggleSettingsModal" 
+        @increaseValues="increaseValues" 
+        @decreaseValues="decreaseValues" 
+        @increaseBg="increaseBg" 
+        @decreaseBg="decreaseBg"/>
 
+    <!-- the menu bar -->
     <div>
-        <h1> 
-            <!-- <div style="display:inline; cursor:pointer; font-size: large" @click="decreaseValues">▼ </div> -->
-            <b> {{ numToWord(numValues) }} </b>
-            <!--<div style="display:inline; cursor:pointer; font-size: large" @click="increaseValues"> ▲ </div> -->
-            <b> value study </b>  
-                
-        </h1>
-        <!-- button toggles -->
-                <div style="display:inline">TOOL:</div>
+        <h1> <b> {{ numToWord(numValues) }} value study </b>  </h1>
 
-                <transition name="fade" mode="out-in">
-                <button class="btn" @click.prevent="toggleTool" v-if="shapeFinished">{{tools[toolMode]}}</button> 
-                <button class="btn urgent-btn" @click.prevent="finishedShape" v-else> FINISH </button> 
-                </transition>
-                &nbsp;
-                <div style="display:inline">VALUE:</div>
+        <div style="display:inline">TOOL:</div>
+        <button class="btn" 
+            @click.prevent="toggleTool" 
+            v-if="shapeFinished">{{tools[toolMode]}}</button> 
+        <button class="btn urgent-btn" 
+            @click.prevent="finishedShape" 
+            v-else> FINISH </button> 
+        &nbsp;
 
-               <ValueButton v-for = "value in listValues" :key="value.id" :value ="value" :isSelected="checkSelected(value)" @selectValue="changeColor(value)" />
-                &nbsp;
-                
+        <div style="display:inline">VALUE:</div>
+        <ValueButton 
+            v-for = "value in listValues" 
+            :key="value.id" 
+            :value ="value" 
+            :isSelected="checkSelected(value)" 
+            @selectValue="changeColor(value)" />
+        &nbsp;
 
+        <br class="hidden-ss">
 
-                <button class="btn" @click="undo">UNDO</button>
-                <button class="btn" @click="redo">REDO</button>
-                <button class="btn" @click="toggleSaveModal">SAVE</button>
-                <button class="btn" @click.prevent="reset">CLEAR</button>
-                <button class="btn" @click.prevent="toggleSettingsModal">SETTINGS</button>
-       
-        <!-- canvas single -->
-        <div class="row mt-4">
-            <div class="col-2"/>
-            <div class="col-8">
-                <Canvas :canvas-id="'canvas-one'" ref="childCanvas" :selectedColor="color" :backgroundColor="backgroundColor" :toolMode="toolMode" @shapeFinished="finishedShape" @shapeStarted="startedShape"/>
-            </div>
-            <div class="col-2"/>
-        </div>      
+        <button class="btn" @click="undo">UNDO</button>
+        <button class="btn" @click="redo">REDO</button>
+        <button class="btn" @click="toggleSaveModal">SAVE</button>
+        <button class="btn" @click.prevent="reset">CLEAR</button>
+        <button class="btn" @click.prevent="toggleSettingsModal">SETTINGS</button>
     </div>
+
+    <!-- the canvas -->
+    <div class="row mt-4">
+        <Canvas 
+            :canvas-id="'canvas-one'" 
+            ref="childCanvas" 
+            :selectedColor="color" 
+            :backgroundColor="backgroundColor" 
+            :toolMode="toolMode" 
+            @shapeFinished="finishedShape" 
+            @shapeStarted="startedShape"/>
+
+    </div>      
+    
+    
     <div>.</div>
-    <p> <a href="/help.html">help</a> / <a href="/guestbook.html">guestbook</a> / <a href="/about.html">about</a> </p>
+    <p> <a href="/tips.html">tips</a> / <a href="/guestbook.html">guestbook</a> / <a href="/about.html">about</a> </p>
 </template>
 
 <script>
@@ -231,5 +250,10 @@
   opacity: 0;
 }
 
+@media (min-width: 800px) {
+  .hidden-ss {
+    display: none !important;
+  }
+}
 
 </style>
