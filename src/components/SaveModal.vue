@@ -4,7 +4,7 @@
             <strong>
             <label for="title">name your drawing: </label> <br>
             </strong>
-            <input v-model="fileName" type="text" id="title" name="title"> <br>
+            <input v-model="fileName" placeholder="please enter a name!" type="text" id="title" name="title"> <br>
             
             <br>
             <strong>
@@ -25,7 +25,7 @@
             <br>
 
 
-            <button class="btn" @click="download"> download </button> 
+            <button class="btn" @click="download" v-if="fileName!=''"> download </button> 
             <button class="btn" @click="close"> close </button>
         </div>
     </div>
