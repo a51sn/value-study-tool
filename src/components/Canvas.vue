@@ -17,7 +17,7 @@
 
     export default {
         name: "Canvas",
-        props: ['canvasId', 'selectedColor', 'backgroundColor', 'toolMode'], // create scope and tool in master maybe? then pass the project and layers down here
+        props: ['canvasId', 'selectedColor', 'outlineVisible', 'backgroundColor', 'toolMode'], 
         emits: ['nothingToUndo', 'nothingToRedo', 'shapeStarted', 'shapeFinished'],
         data: () => ({
             path: null,
@@ -35,6 +35,7 @@
 
         methods: {
             reset() {
+                this.finish();
                 this.scope.project.activeLayer.copyTo(this.recoverCleared);
                 this.scope.project.activeLayer.removeChildren();
                 var rectangle = new paper.Rectangle(new paper.Point(0,0), new paper.Point(750,500)) ;
@@ -133,7 +134,8 @@
                 if(this.toolMode){
                     this.currentTool.onMouseDown = (event) => {
                         console.log("hey");
-                        // init path
+                        
+                        // last path is finished, so start a new path
                         if (self.lastPathFinished){
                             self.path = self.pathCreate(self.scope);
                             self.lastPathFinished = false;
@@ -155,7 +157,7 @@
 
                 // FREEHAND TOOL
                 } else {
-                    self.lastPathFinished = true;
+                    this.finish();
                     this.currentTool.onMouseDown = (event) => {
                         // init path
                         self.path = self.pathCreate(self.scope);
@@ -173,7 +175,6 @@
                 }
 
             },
-
         },
         watch: {
             backgroundColor: function (){

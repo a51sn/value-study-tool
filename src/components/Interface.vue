@@ -60,7 +60,7 @@
     
     
     <div>.</div>
-    <p> <a href="/tips.html">tips</a> / <a href="/guestbook.html">guestbook</a> / <a href="/about.html">about</a> </p>
+    <p> <a href="./tips.html">tips</a> / <a href="./guestbook.html">guestbook</a> / <a href="./about.html">about</a> </p>
 </template>
 
 <script>
@@ -90,7 +90,6 @@
             tools: ["FREEHAND", "POLYGON"],
             toolMode: null,
             shapeFinished: null,
-
         }),
 
 
@@ -106,7 +105,18 @@
                     } else {
                         self.undo();
                     }
-                } 
+                } else if (e.key == "Enter"){
+                    self.finishedShape();
+                } else if (e.key == 's' && e.ctrlKey || e.key == 's' && e.metaKey){
+                    e.preventDefault();
+                    self.toggleSaveModal();
+                } else if (e.key == "Tab"){
+                    e.preventDefault();
+                    self.toggleTool();
+                } else if (e.key == "Clear"){
+                    e.preventDefault();
+                    self.reset();
+                }
             })
 
             this.listValues = this.generateValues(self.numValues);
@@ -115,7 +125,6 @@
             console.log(this.color)
             this.toolMode = 0;
             this.shapeFinished = true;
-
     },
 
         methods: {
