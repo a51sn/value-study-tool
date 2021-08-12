@@ -53,6 +53,7 @@
             :selectedColor="color" 
             :backgroundColor="backgroundColor" 
             :toolMode="toolMode" 
+            :aspectRatio="aspectRatio"
             @shapeFinished="finishedShape" 
             @shapeStarted="startedShape"/>
 

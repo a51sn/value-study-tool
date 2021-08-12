@@ -1,23 +1,24 @@
 
 <template>
     <div>
-        <canvas :id="canvasId" class="canvas-style" 
+        <canvas :id="canvasId" 
+        class="canvas-style" 
         v-on:mousedown="mouseDown"
+        :style="'--canvas-height: ' + height + 'px;' +
+        '--canvas-width: ' + width + 'px; ' "
+
         />
     </div>
 </template>
 
 <script>
-    // TODO: move all of this logic to master
     // packages
     const paper = require('paper');
     const FileSaver = require('file-saver');
 
-
-
     export default {
         name: "Canvas",
-        props: ['canvasId', 'selectedColor', 'outlineVisible', 'backgroundColor', 'toolMode'], 
+        props: ['canvasId', 'selectedColor', 'aspectRatio', 'backgroundColor', 'toolMode'], 
         emits: ['nothingToUndo', 'nothingToRedo', 'shapeStarted', 'shapeFinished'],
         data: () => ({
             path: null,
@@ -25,22 +26,33 @@
             drawingLayer: null,
             currentTool: null,
             background: null,
-
             undoHistory: null,
             recoverCleared: null,
-
             lastPathFinished: null,
-            closingPoint: null,
         }),
 
+        computed: {
+            width: function() {
+                return this.aspectRatio[0] * 250;
+            },
+
+            height: function() {
+                return this.aspectRatio[1] * 250;
+            }
+        },
+
         methods: {
+            drawBackground(){
+                var rectangle = new paper.Rectangle(new paper.Point(0,0), new paper.Point(this.width,this.height)) ;
+                this.background = new paper.Path.Rectangle(rectangle);
+                this.background.fillColor = this.backgroundColor;
+            },
+
             reset() {
                 this.finish();
                 this.scope.project.activeLayer.copyTo(this.recoverCleared);
                 this.scope.project.activeLayer.removeChildren();
-                var rectangle = new paper.Rectangle(new paper.Point(0,0), new paper.Point(750,500)) ;
-                this.background = new paper.Path.Rectangle(rectangle);
-                this.background.fillColor = this.backgroundColor;
+                this.drawBackground();
                 console.log("background after reset: " + this.backgroundColor)
             },
 
@@ -201,9 +213,7 @@
 
             this.drawingLayer = new paper.Layer();
 
-            var rectangle = new paper.Rectangle(new paper.Point(0,0), new paper.Point(750,500)) ;
-            this.background = new paper.Path.Rectangle(rectangle);
-            this.background.fillColor = this.backgroundColor;
+            this.drawBackground();
             console.log("background: " + this.backgroundColor)
 
             console.log(this.scope.project.layers);
@@ -215,9 +225,10 @@
 
 <style scoped>
     .canvas-style {
-        width: 750px !important;
-        height: 500px !important;
+        width: var(--canvas-width); 
+        height: var(--canvas-height);
         display: block;
         margin: auto;
     }
+
 </style>

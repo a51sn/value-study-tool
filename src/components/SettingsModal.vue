@@ -41,13 +41,14 @@
                 <p>&nbsp; orientation: &nbsp;<strong> {{orientations[orientation]}}</strong>&nbsp;<button class="btn" @click="toggleOrientation"> switch</button> 
                 </p> 
                 <br>
-                <div class="aspectOption"> 1:&nbsp;1 </div>
-                <div class="aspectOption"> 3:&nbsp;2 </div>
-                <div class="aspectOption"> 4:&nbsp;3 </div>
-                <div class="aspectOption"> 5:&nbsp;3</div>
+                <button class="btn aspectOption"> 1:&nbsp;1 </button>
+                <button class="btn aspectOption"> 4:&nbsp;3 </button>
+                <button class="btn aspectOption"> 3:&nbsp;2 </button>
+                <button class="btn aspectOption"> 16:9 </button>
 
-                <div class="aspectOption"> 16:9 </div>
-                <div class="aspectOption"> 21:9</div>
+                <button class="btn aspectOption"> 5:&nbsp;3</button>
+
+                <button class="btn aspectOption"> 21:9</button>
                 <br>
 
                 <br>
@@ -68,11 +69,12 @@
         data: () => ({
             thisAccentColor: null,
             showingAspectRatioOptions: null,
+            newAspectRatio: null,
             orientations: null,
             orientation: null
         }),
         props: ['numValues', 'darkMode', 'aspectRatio', 'bgColorNum', 'accentColor'],
-        emits: ['close', 'increaseValues', 'decreaseValues', 'increaseBg', 'decreaseBg'],
+        emits: ['close', 'increaseValues', 'decreaseValues', 'increaseBg', 'decreaseBg', 'changeAspectRatio'],
         methods: {
             close(){
                 this.$emit("close");
@@ -84,6 +86,10 @@
             
             toggleOrientation() {
                 this.orientation = Math.abs(this.orientation - 1);
+            },
+
+            applyAspectRatio(){
+                this.$emit("changeAspectRatio")
             },
             
             increaseValues(){
@@ -154,6 +160,10 @@ h3 {
 }
 
 .aspectOption:hover {
+    background-color: thistle;
+}
+
+.activeOption {
     background-color: thistle;
 }
 
