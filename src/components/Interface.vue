@@ -12,7 +12,9 @@
         @increaseValues="increaseValues" 
         @decreaseValues="decreaseValues" 
         @increaseBg="increaseBg" 
-        @decreaseBg="decreaseBg"/>
+        @decreaseBg="decreaseBg"
+        @changeAspectRatio="changeAspectRatio"
+        />
 
     <!-- the menu bar -->
     <div>
@@ -49,6 +51,7 @@
     <div class="row mt-4">
         <Canvas 
             :canvas-id="'canvas-one'" 
+            resize="true"
             ref="childCanvas" 
             :selectedColor="color" 
             :backgroundColor="backgroundColor" 
@@ -195,6 +198,10 @@
                 if (bgIndex > 0){
                     this.backgroundColor = this.listValues[bgIndex - 1];
                 } 
+            },
+
+            changeAspectRatio(newAspectRatio){
+                this.aspectRatio = newAspectRatio;
             },
 
             toggleSaveModal(){

@@ -191,7 +191,17 @@
         watch: {
             backgroundColor: function (){
                 this.background.fillColor = this.backgroundColor;
-                console.log("background after watch: " + this.backgroundColor)
+                console.log("background after watch: " + this.backgroundColor);
+            },
+            
+            width(){
+                this.scope.view.viewSize.width = this.aspectRatio[0] * 250;
+                this.reset();
+            },
+
+            height(){
+                this.scope.view.viewSize.height = this.aspectRatio[1] * 250;
+                this.reset();
             }
         },
 
