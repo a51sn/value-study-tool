@@ -53,7 +53,6 @@
                 this.scope.project.activeLayer.copyTo(this.recoverCleared);
                 this.scope.project.activeLayer.removeChildren();
                 this.drawBackground();
-                console.log("background after reset: " + this.backgroundColor)
             },
 
             save(fileName, formatNum) {
@@ -82,7 +81,6 @@
                         a.download = fileName + "." + formats[formatNum];  // file name
                         a.href = canvas.toDataURL( fileName + "/" + formats[formatNum]); //saving in PNG or JPG
                         a.style = 'display: none;';
-                        console.log("hi");
                         a.click();
                     }
                 }
@@ -139,15 +137,15 @@
                 let self = this; 
                 this.scope.activate();
                 this.drawingLayer.activate();
-                console.log(this.toolMode);
+                
+                console.log(this.toolMode); 
                 this.undoHistory.removeChildren();
 
                 // POLYGON TOOL
                 if(this.toolMode){
-                    this.currentTool.onMouseDown = (event) => {
-                        console.log("hey");
-                        
-                        // last path is finished, so start a new path
+                    this.currentTool.onMouseDown = (event) => {      
+                    
+                        // start a new path
                         if (self.lastPathFinished){
                             self.path = self.pathCreate(self.scope);
                             self.lastPathFinished = false;
@@ -155,8 +153,7 @@
                             self.path.add(event.point);
                             self.path.fillColor = this.selectedColor;
 
-
-                        } else {
+                        } else { // continue old
                             self.path.add(event.point);
                         }
                     };
@@ -191,7 +188,6 @@
         watch: {
             backgroundColor: function (){
                 this.background.fillColor = this.backgroundColor;
-                console.log("background after watch: " + this.backgroundColor);
             },
             
             width(){
@@ -222,12 +218,7 @@
             })
 
             this.drawingLayer = new paper.Layer();
-
             this.drawBackground();
-            console.log("background: " + this.backgroundColor)
-
-            console.log(this.scope.project.layers);
-
             this.lastPathFinished = true;
         }
     }
