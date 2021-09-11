@@ -1,5 +1,7 @@
 # three-value-vue
 
+Latest version live at https://mushysun.neocities.org/value-study.html
+
 ## Project setup
 ```
 yarn install
